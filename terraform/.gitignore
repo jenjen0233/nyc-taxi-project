@@ -8,6 +8,9 @@
 terraform.tfvars
 *.auto.tfvars
 
+# text files
+*.txt
+
 # Service account keys
 *.json
 
