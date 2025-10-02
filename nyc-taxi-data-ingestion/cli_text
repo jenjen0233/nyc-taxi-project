@@ -16,8 +16,8 @@ https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2024-01.parquet
 docker run --rm \
   -v ~/.config/gcloud:/root/.config/gcloud \
   -v ~/Desktop/nyc-taxi-project/nyc-taxi-ingestion/ingest_data.py:/app/ingest_data.py \
-  -e PROJECT_ID="wired-epsilon-472120-j8" \
-  -e BUCKET_NAME="wired-epsilon-472120-j8-nyc-taxi-bucket" \
+  -e PROJECT_ID="project" \
+  -e BUCKET_NAME="bucket" \
   -e YEARS="2024,2025" \
   -e DATASET_TYPE="yellow" \
   nyc-taxi-ingestion
