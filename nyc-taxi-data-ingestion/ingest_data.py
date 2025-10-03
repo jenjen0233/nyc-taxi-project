@@ -10,8 +10,8 @@ from datetime import datetime
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # WORKAROUND: Prevent timeout for large files, comment out if running for green datasets
-storage.blob._MAX_MULTIPART_SIZE = 5 * 1024 * 1024  # 5 MB
-storage.blob._DEFAULT_CHUNKSIZE = 5 * 1024 * 1024  # 5 MB
+# storage.blob._MAX_MULTIPART_SIZE = 5 * 1024 * 1024  # 5 MB
+# storage.blob._DEFAULT_CHUNKSIZE = 5 * 1024 * 1024  # 5 MB
 
 # Configuration from environment variables
 PROJECT_ID = os.getenv("PROJECT_ID")
@@ -90,46 +90,46 @@ def download_and_process_file(year, month, dataset_type):
         logging.error(f"Failed to process {file_name}: {str(e)}")
         return False
 
-# def download_taxi_zone_lookup():
-#     """Download taxi zone lookup file and upload to GCS."""
-#     file_name = "taxi_zone_lookup.csv"
-#     url = f"https://d37ci6vzurychx.cloudfront.net/misc/{file_name}"
+def download_taxi_zone_lookup():
+    """Download taxi zone lookup file and upload to GCS."""
+    file_name = "taxi_zone_lookup.csv"
+    url = f"https://d37ci6vzurychx.cloudfront.net/misc/{file_name}"
     
-#     try:
-#         logging.info(f"Downloading {file_name} from {url}")
+    try:
+        logging.info(f"Downloading {file_name} from {url}")
         
-#         # Download file with streaming
-#         r = requests.get(url, stream=True, timeout=300)
-#         r.raise_for_status()
+        # Download file with streaming
+        r = requests.get(url, stream=True, timeout=300)
+        r.raise_for_status()
         
-#         # Save locally
-#         local_path = f"/tmp/{file_name}"
-#         with open(local_path, "wb") as f:
-#             for chunk in r.iter_content(chunk_size=8192):
-#                 if chunk:
-#                     f.write(chunk)
-#         logging.info(f"Local: {file_name}")
+        # Save locally
+        local_path = f"/tmp/{file_name}"
+        with open(local_path, "wb") as f:
+            for chunk in r.iter_content(chunk_size=8192):
+                if chunk:
+                    f.write(chunk)
+        logging.info(f"Local: {file_name}")
         
-#         # Upload to GCS with folder structure: misc/{file_name}
-#         gcs_path = f"{file_name}"
-#         upload_to_gcs(local_path, gcs_path)
-#         logging.info(f"GCS: {gcs_path}")
+        # Upload to GCS with folder structure: misc/{file_name}
+        gcs_path = f"{file_name}"
+        upload_to_gcs(local_path, gcs_path)
+        logging.info(f"GCS: {gcs_path}")
         
-#         # Clean up local file
-#         os.remove(local_path)
-#         logging.info(f"Successfully processed {file_name}")
-#         return True
+        # Clean up local file
+        os.remove(local_path)
+        logging.info(f"Successfully processed {file_name}")
+        return True
     
-#     except requests.exceptions.HTTPError as e:
-#         if e.response.status_code == 404:
-#             logging.warning(f"File not found (404): {url}")
-#             return False
-#         else:
-#             logging.error(f"Error downloading: {e}")
-#             return False
-#     except Exception as e:
-#         logging.error(f"Failed to process {file_name}: {str(e)}")
-#         return False    
+    except requests.exceptions.HTTPError as e:
+        if e.response.status_code == 404:
+            logging.warning(f"File not found (404): {url}")
+            return False
+        else:
+            logging.error(f"Error downloading: {e}")
+            return False
+    except Exception as e:
+        logging.error(f"Failed to process {file_name}: {str(e)}")
+        return False    
 
 def load_gcs_to_bigquery(dataset_type):
     """
